@@ -1,4 +1,4 @@
-# Image Manipulation Scripts
+# ffmpeg-image-utils
 
 A collection of simple bash scripts for image processing.
 
