@@ -1,14 +1,18 @@
-# Image Cropping Script
+# Image Manipulation Scripts
 
-A simple bash script to automatically crop images based on their orientation (portrait or landscape).
+A collection of simple bash scripts for image processing.
 
 ## Requirements
 
 -   [FFmpeg](https://ffmpeg.org/)
 
-## Usage
+---
 
-The script processes all `.jpg`, `.jpeg`, and `.png` files in the current directory.
+## Image Cropping Script (`crop_images.sh`)
+
+Automatically crops images based on their orientation (portrait or landscape).
+
+### Usage
 
 ```bash
 ./crop_images.sh [options]
@@ -22,8 +26,31 @@ The script processes all `.jpg`, `.jpeg`, and `.png` files in the current direct
 
 ### Example
 
-To crop landscape images to 800x600 and save them in a directory named `my_crops`:
-
 ```bash
 ./crop_images.sh -l 800x600 -o my_crops
+```
+
+---
+
+## WebP Conversion Script (`convert_to_webp.sh`)
+
+Converts `.jpg`, `.jpeg`, and `.png` images to `.webp` format.
+
+### Usage
+
+```bash
+./convert_to_webp.sh [options]
+```
+
+### Options
+
+-   `-q, --quality <0-100>`: Set the WebP quality (default: 80).
+-   `-o, --output <dir>`: Set the output directory (default: `webp_images`).
+
+### Example
+
+To convert images with a quality of 90 and save them in a `converted` directory:
+
+```bash
+./convert_to_webp.sh -q 90 -o converted
 ```
