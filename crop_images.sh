@@ -4,6 +4,7 @@
 LANDSCAPE_DIMS="480x230"
 PORTRAIT_DIMS="480x600"
 OUTPUT_DIR="cropped_images"
+INPUT_FILE=""
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -20,9 +21,13 @@ while [[ $# -gt 0 ]]; do
             OUTPUT_DIR="$2"
             shift; shift
             ;;
+        -f|--file)
+            INPUT_FILE="$2"
+            shift; shift
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [-l WxH] [-p WxH] [-o output_dir]"
+            echo "Usage: $0 [-l WxH] [-p WxH] [-o output_dir] [-f file]"
             exit 1
             ;;
     esac
@@ -41,9 +46,8 @@ echo "  Landscape: ${LANDSCAPE_W}x${LANDSCAPE_H}"
 echo "  Portrait:  ${PORTRAIT_W}x${PORTRAIT_H}"
 echo "  Output:    ./$OUTPUT_DIR/"
 
-for img in *.jpg *.jpeg *.png; do
-    [ -e "$img" ] || continue
-    
+process_image() {
+    img=$1
     dimensions=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "$img")
     width=$(echo "$dimensions" | cut -d',' -f1)
     height=$(echo "$dimensions" | cut -d',' -f2)
@@ -59,6 +63,20 @@ for img in *.jpg *.jpeg *.png; do
     fi
     echo "Done: $img"
     echo
-done
+}
+
+if [ -n "$INPUT_FILE" ]; then
+    if [ -e "$INPUT_FILE" ]; then
+        process_image "$INPUT_FILE"
+    else
+        echo "Error: File not found: $INPUT_FILE"
+        exit 1
+    fi
+else
+    for img in *.jpg *.jpeg *.png; do
+        [ -e "$img" ] || continue
+        process_image "$img"
+    done
+fi
 
 echo "All images saved to: ./$OUTPUT_DIR/"
