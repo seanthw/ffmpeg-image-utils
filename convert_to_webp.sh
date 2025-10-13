@@ -4,6 +4,7 @@
 QUALITY=80
 OUTPUT_DIR="webp_images"
 INPUT_FILE=""
+INPUT_DIR="."
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -20,9 +21,13 @@ while [[ $# -gt 0 ]]; do
             INPUT_FILE="$2"
             shift; shift
             ;;
+        -d|--directory)
+            INPUT_DIR="$2"
+            shift; shift
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [-q quality] [-o output_dir] [-f file]"
+            echo "Usage: $0 [-q quality] [-o output_dir] [-f file] [-d directory]"
             exit 1
             ;;
     esac
@@ -35,7 +40,8 @@ echo "Output directory: ./${OUTPUT_DIR}/"
 
 if [ -n "$INPUT_FILE" ]; then
     if [ -e "$INPUT_FILE" ]; then
-        output_file="${INPUT_FILE%.*}.webp"
+        output_file="${INPUT_FILE##*/}"
+        output_file="${output_file%.*}.webp"
         echo "Converting: $INPUT_FILE -> ${OUTPUT_DIR}/${output_file}"
         ffmpeg -i "$INPUT_FILE" -q:v "$QUALITY" -loglevel error "${OUTPUT_DIR}/${output_file}"
     else
@@ -43,10 +49,11 @@ if [ -n "$INPUT_FILE" ]; then
         exit 1
     fi
 else
-    for img in *.jpg *.jpeg *.png; do
+    for img in "${INPUT_DIR}"/*.jpg "${INPUT_DIR}"/*.jpeg "${INPUT_DIR}"/*.png; do
         [ -e "$img" ] || continue
         
-        output_file="${img%.*}.webp"
+        output_file="${img##*/}"
+        output_file="${output_file%.*}.webp"
         
         echo "Converting: $img -> ${OUTPUT_DIR}/${output_file}"
         

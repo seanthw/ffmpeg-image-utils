@@ -5,6 +5,7 @@ LANDSCAPE_DIMS="480x230"
 PORTRAIT_DIMS="480x600"
 OUTPUT_DIR="cropped_images"
 INPUT_FILE=""
+INPUT_DIR="."
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -25,9 +26,13 @@ while [[ $# -gt 0 ]]; do
             INPUT_FILE="$2"
             shift; shift
             ;;
+        -d|--directory)
+            INPUT_DIR="$2"
+            shift; shift
+            ;;
         *)
             echo "Unknown option: $1"
-            echo "Usage: $0 [-l WxH] [-p WxH] [-o output_dir] [-f file]"
+            echo "Usage: $0 [-l WxH] [-p WxH] [-o output_dir] [-f file] [-d directory]"
             exit 1
             ;;
     esac
@@ -55,10 +60,10 @@ process_image() {
     echo "Processing: $img (${width}x${height})"
     
     if [ "$height" -gt "$width" ]; then
-        ffmpeg -i "$img" -vf "scale=${PORTRAIT_W}:-1, crop=${PORTRAIT_W}:${PORTRAIT_H}" -loglevel error "$OUTPUT_DIR/cropped_${img%.*}.jpg"
+        ffmpeg -i "$img" -vf "scale=${PORTRAIT_W}:-1, crop=${PORTRAIT_W}:${PORTRAIT_H}" -loglevel error "$OUTPUT_DIR/cropped_${img##*/}"
         echo "  Cropped to portrait: ${PORTRAIT_W}x${PORTRAIT_H}"
     else
-        ffmpeg -i "$img" -vf "scale=${LANDSCAPE_W}:-1, crop=${LANDSCAPE_W}:${LANDSCAPE_H}" -loglevel error "$OUTPUT_DIR/cropped_${img%.*}.jpg"
+        ffmpeg -i "$img" -vf "scale=${LANDSCAPE_W}:-1, crop=${LANDSCAPE_W}:${LANDSCAPE_H}" -loglevel error "$OUTPUT_DIR/cropped_${img##*/}"
         echo "  Cropped to landscape: ${LANDSCAPE_W}x${LANDSCAPE_H}"
     fi
     echo "Done: $img"
@@ -73,7 +78,7 @@ if [ -n "$INPUT_FILE" ]; then
         exit 1
     fi
 else
-    for img in *.jpg *.jpeg *.png; do
+    for img in "${INPUT_DIR}"/*.jpg "${INPUT_DIR}"/*.jpeg "${INPUT_DIR}"/*.png; do
         [ -e "$img" ] || continue
         process_image "$img"
     done

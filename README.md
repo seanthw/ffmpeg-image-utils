@@ -24,6 +24,7 @@ Automatically crops images based on their orientation (portrait or landscape).
 -   `-p, --portrait <WxH>`: Set dimensions for portrait images (default: 480x600).
 -   `-o, --output <dir>`: Set the output directory (default: `cropped_images`).
 -   `-f, --file <file>`: Process a single file instead of all images in the directory.
+-   `-d, --directory <dir>`: Process all images in the specified directory.
 
 ### Example
 
@@ -34,6 +35,11 @@ Automatically crops images based on their orientation (portrait or landscape).
 To process a single file:
 ```bash
 ./crop_images.sh -f my_image.jpg -o my_crops
+```
+
+To process all images in a specific directory:
+```bash
+./crop_images.sh -d /path/to/images -o my_crops
 ```
 
 ---
@@ -53,6 +59,7 @@ Converts `.jpg`, `.jpeg`, and `.png` images to `.webp` format.
 -   `-q, --quality <0-100>`: Set the WebP quality (default: 80).
 -   `-o, --output <dir>`: Set the output directory (default: `webp_images`).
 -   `-f, --file <file>`: Process a single file instead of all images in the directory.
+-   `-d, --directory <dir>`: Process all images in the specified directory.
 
 ### Example
 
@@ -60,4 +67,9 @@ To convert images with a quality of 90 and save them in a `converted` directory:
 
 ```bash
 ./convert_to_webp.sh -q 90 -o converted
+```
+
+To convert all images in a specific directory:
+```bash
+./convert_to_webp.sh -d /path/to/images -q 90 -o converted
 ```
