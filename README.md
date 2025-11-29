@@ -25,6 +25,8 @@ Automatically crops images based on their orientation (portrait or landscape).
 -   `-o, --output <dir>`: Set the output directory (default: `cropped_images`).
 -   `-f, --file <file>`: Process a single file instead of all images in the directory.
 -   `-d, --directory <dir>`: Process all images in the specified directory.
+-   `-c, --circle`: Crop images into a circular shape. Output will always be PNG.
+-   `-cs, --circle-size <SIZE>`: Set the diameter for circular crops (default: 400).
 
 ### Example
 
@@ -41,6 +43,12 @@ To process all images in a specific directory:
 ```bash
 ./crop_images.sh -d /path/to/images -o my_crops
 ```
+
+To crop images into a circle:
+```bash
+./crop_images.sh -f my_image.jpg -c -cs 200
+```
+
 
 ---
 
