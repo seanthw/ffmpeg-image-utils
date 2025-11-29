@@ -107,10 +107,10 @@ process_image() {
         out_file="$OUTPUT_DIR/cropped_${img##*/}"
 
         if [ "$height" -gt "$width" ]; then
-            ffmpeg -i "$img" -vf "scale=${PORTRAIT_W}:-1, crop=${PORTRAIT_W}:${PORTRAIT_H}" -y -loglevel error "$out_file"
+            ffmpeg -i "$img" -vf "scale=${PORTRAIT_W}:${PORTRAIT_H}:force_original_aspect_ratio=increase,crop=${PORTRAIT_W}:${PORTRAIT_H}" -y -loglevel error "$out_file"
             echo "  Cropped to portrait: ${PORTRAIT_W}x${PORTRAIT_H}"
         else
-            ffmpeg -i "$img" -vf "scale=${LANDSCAPE_W}:-1, crop=${LANDSCAPE_W}:${LANDSCAPE_H}" -y -loglevel error "$out_file"
+            ffmpeg -i "$img" -vf "scale=${LANDSCAPE_W}:${LANDSCAPE_H}:force_original_aspect_ratio=increase,crop=${LANDSCAPE_W}:${LANDSCAPE_H}" -y -loglevel error "$out_file"
             echo "  Cropped to landscape: ${LANDSCAPE_W}x${LANDSCAPE_H}"
         fi
     fi
